@@ -118,4 +118,9 @@ export default makeStyles(() => ({
         marginTop: '0px',
         width: '100%',
     },
+    button: {
+        textTransform: 'capitalize',
+        fontSize: '14px',
+        letterSpacing: '.5px',
+    }
 }));

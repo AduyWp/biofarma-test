@@ -1,3 +1,3 @@
-import Page from '../src/modules/theme';
+import Page from '../src/modules/Home';
 
 export default Page;
