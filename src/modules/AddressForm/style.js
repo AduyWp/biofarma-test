@@ -116,5 +116,6 @@ export default makeStyles(() => ({
     },
     inputField: {
         marginTop: '0px',
+        width: '100%',
     },
 }));
