@@ -49,7 +49,6 @@ const Home = () => {
         },
         userDecisionTimeout: 5000,
     });
-    console.log(coords)
 
     const [coordsDestination, setCoordsDestination] = useState()
     const coorddinate = [
