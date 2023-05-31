@@ -58,10 +58,11 @@ export default makeStyles(() => ({
     detailWrapper: {
         padding: '0 16px',
         position: 'relative',
-        paddingTop: '10vh',
+        paddingTop: '5vh',
     },
     titleHeader: {
         fontSize: '14px',
+        fontWeight: 'bold',
     },
     dataWrapper: {
         paddingTop: '1rem',

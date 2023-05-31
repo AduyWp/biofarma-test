@@ -57,6 +57,8 @@ const AddressFormView = () => {
         setLongitude(value.lng);
     };
 
+    const [addressListArray, setAddressListArray] = useState([])
+
     const formik = useFormik({
         initialValues: {
             region_name: '',
@@ -78,14 +80,27 @@ const AddressFormView = () => {
             const {
                 ...restValues
             } = values;
+            const addressListPayload = {
+                region_name: formik.values.region_name,
+                postcode: formik.values.postcode,
+                city: formik.values.city,
+                district: formik.values.sub_district,
+                sub_district: formik.values.sub_district,
+                addressComplete: formik.values.addressComplete,
+                lat: localStorage.getItem('lat'),
+                lng: localStorage.getItem('lng')
+            }
 
-            localStorage.setItem('region_name', JSON.stringify(formik.values.region_name));
-            localStorage.setItem('postcode', JSON.stringify(formik.values.postcode));
-            localStorage.setItem('city', JSON.stringify(formik.values.city));
-            localStorage.setItem('district', JSON.stringify(formik.values.district));
-            localStorage.setItem('sub_district', JSON.stringify(formik.values.sub_district));
-            localStorage.setItem('addressComplete', JSON.stringify(formik.values.addressComplete));
+            var addressListArr = JSON.parse(localStorage.getItem('addressList') || "[]");
+            addressListArr.push(addressListPayload);
+            localStorage.setItem('addressList', JSON.stringify(addressListArr));
+            localStorage.removeItem('lat');
+            localStorage.removeItem('lng');
+
             setOpen(true);
+            setTimeout(() => {
+                router.push('/');
+            }, 1000);
         },
     });
 
@@ -159,6 +174,14 @@ const AddressFormView = () => {
         setSubDistrict(formik.values.sub_district);
     }, [formik.values]);
 
+    React.useEffect(() => {
+        if(localStorage.getItem('addressList')){
+            localStorage.getItem('addressList')
+        } else {
+            localStorage.setItem('addressList', JSON.stringify([]))
+        }
+    }, [addressListArray]);
+
     const [open, setOpen] = React.useState(false);
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -180,6 +203,21 @@ const AddressFormView = () => {
                     mapPosition={mapPosition}
                     dragMarkerDone={handleDragPosition}
                 />
+                <Button
+                    fullWidth
+                    className={styles.button}
+                    variant="contained" color="secondary"
+                    id="btnInputAddressForm"
+                    type="submit"
+                    onClick={() =>{
+                        localStorage.removeItem('lat');
+                        localStorage.removeItem('lng');
+                    }}
+                >
+                    <Typography type="bold">
+                        Hapus Pinpoint Location
+                    </Typography>
+                </Button>
             </Box>
             <form onSubmit={formik.handleSubmit}>
                 <Box className={styles.detailWrapper}>
@@ -195,6 +233,7 @@ const AddressFormView = () => {
                                 name="regionName"
                                 placeholder="Ketik Alamat Lengkap..."
                                 value={regionNameState}
+                                autoComplete='off'
                                 onChange={(e) => {
                                     formik.values.region_name = e.target.value;
                                     setRegionName(e.target.value);
@@ -212,6 +251,7 @@ const AddressFormView = () => {
                                 name="district"
                                 placeholder="Ketik Kecamatan"
                                 value={districtState}
+                                autoComplete='off'
                                 onChange={(e) => {
                                     formik.values.district = e.target.value;
                                     setDistrict(e.target.value);
@@ -229,6 +269,7 @@ const AddressFormView = () => {
                                 name="district"
                                 placeholder="Ketik Kota"
                                 value={cityState}
+                                autoComplete='off'
                                 onChange={(e) => {
                                     formik.values.city = e.target.value;
                                     setCity(e.target.value);
@@ -246,6 +287,7 @@ const AddressFormView = () => {
                                 name="district"
                                 placeholder="Ketik Desa"
                                 value={subDistrictState}
+                                autoComplete='off'
                                 onChange={(e) => {
                                     formik.values.sub_district = e.target.value;
                                     setSubDistrict(e.target.value);
@@ -263,6 +305,8 @@ const AddressFormView = () => {
                                 name="postCode"
                                 placeholder="Ketik Kode Pos"
                                 value={postcodeState}
+                                type="number"
+                                autoComplete='off'
                                 onChange={(e) => {
                                     formik.values.postcode = e.target.value;
                                     setPostcode(e.target.value);
@@ -273,10 +317,10 @@ const AddressFormView = () => {
                             />
                         </Grid>
                         <Grid item xs={12} className={styles.numberIdWrapper}>
-                            <Typography variant="p" type="bold" className={styles.dataName}>
+                            <Typography variant="subtitle1" type="bold" className={styles.dataName}>
                                 Lengkapi Alamat*
                             </Typography>
-                            <Typography variant="p" type="regular" className={styles.dataCounter}>
+                            <Typography variant="subtitle1" type="regular" className={styles.dataCounter}>
                                 {addressCompleteLength} / 100
                             </Typography>
                         </Grid>
@@ -286,6 +330,7 @@ const AddressFormView = () => {
                                 placeholder="Ketik Alamat Lengkap..."
                                 variant="outlined"
                                 value={addressComplete}
+                                autoComplete='off'
                                 onChange={(e) => {
                                     formik.values.addressComplete = e.target.value;
                                     setAddressComplete(e.target.value);
@@ -307,7 +352,7 @@ const AddressFormView = () => {
                                 id="btnInputAddressForm"
                                 type="submit"
                             >
-                                <Typography variant="span" type="bold">
+                                <Typography variant="subtitle1" type="bold">
                                     Konfirmasi Alamat
                                 </Typography>
                             </Button>
@@ -317,7 +362,7 @@ const AddressFormView = () => {
             </form>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                    This is a success message!
+                    Sukses Menambahkan Alamat
                 </Alert>
             </Snackbar>
         </>

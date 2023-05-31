@@ -5,7 +5,7 @@ import {
     Autocomplete, GoogleMap, MarkerF, useJsApiLoader,
 } from '@react-google-maps/api';
 import { capitalizeEachWord } from '../../../helpers/text';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // Set map container size
 const containerStyle = {
@@ -121,125 +121,6 @@ const MapsAutocomplete = (props) => {
             }
         }
     };
-
-    // Get a new coordinates bounds based on current address information input (village, district, city, region)
-    useEffect(() => {
-        if (geocodingKey) {
-            // Check if selected country is Indonesia
-            if (formik.values.country.full_name_locale === 'Indonesia') {
-                if (!!formik.values.village && !!formik.values.district && !!formik.values.city && !!formik.values.region) {
-                    const query = `${formik.values.village.label}+${formik.values.district.label}+${formik.values.city.label}+${formik.values.region.name}`;
-                    const gmapApiKey = geocodingKey;
-                    fetch('/geocoding-services', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            query,
-                            gmapApiKey,
-                        }),
-                        headers: { 'Content-Type': 'application/json' },
-                    })
-                        .then((response) => response.json())
-                        .then((responseData) => {
-                            if (responseData.results.length > 0) {
-                                const { bounds, location } = responseData.results[0].geometry;
-                                dragMarkerDone({
-                                    lat: location.lat,
-                                    lng: location.lng,
-                                });
-                                setStateBounds({
-                                    northeast: {
-                                        lat: parseFloat(bounds.northeast.lat),
-                                        lng: parseFloat(bounds.northeast.lng),
-                                    },
-                                    southwest: {
-                                        lat: parseFloat(bounds.southwest.lat),
-                                        lng: parseFloat(bounds.southwest.lng),
-                                    },
-                                });
-                            }
-                        })
-                        .catch((error) => {
-                            // eslint-disable-next-line no-console
-                            console.log(error);
-                        });
-                }
-                // Check if selected country is USA
-            } else if (formik.values.country.full_name_locale === 'United States') {
-                if (!!formik.values.region && !!formik.values.country.full_name_locale) {
-                    const query = `${formik.values.region.name}+${formik.values.country.full_name_locale}`;
-                    const gmapApiKey = geocodingKey;
-                    fetch('/geocoding-services', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            query,
-                            gmapApiKey,
-                        }),
-                        headers: { 'Content-Type': 'application/json' },
-                    })
-                        .then((response) => response.json())
-                        .then((responseData) => {
-                            if (responseData.results.length > 0) {
-                                const { bounds, location } = responseData.results[0].geometry;
-                                dragMarkerDone({
-                                    lat: location.lat,
-                                    lng: location.lng,
-                                });
-                                setStateBounds({
-                                    northeast: {
-                                        lat: parseFloat(bounds.northeast.lat),
-                                        lng: parseFloat(bounds.northeast.lng),
-                                    },
-                                    southwest: {
-                                        lat: parseFloat(bounds.southwest.lat),
-                                        lng: parseFloat(bounds.southwest.lng),
-                                    },
-                                });
-                            }
-                        })
-                        .catch((error) => {
-                            // eslint-disable-next-line no-console
-                            console.log(error);
-                        });
-                }
-                // Check if selected country beside Indonesia or USA
-            } else {
-                const query = `${formik.values.country.full_name_locale}`;
-                const gmapApiKey = geocodingKey;
-                fetch('/geocoding-services', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        query,
-                        gmapApiKey,
-                    }),
-                    headers: { 'Content-Type': 'application/json' },
-                })
-                    .then((response) => response.json())
-                    .then((responseData) => {
-                        if (responseData.results.length > 0) {
-                            const { bounds, location } = responseData.results[0].geometry;
-                            dragMarkerDone({
-                                lat: location.lat,
-                                lng: location.lng,
-                            });
-                            setStateBounds({
-                                northeast: {
-                                    lat: parseFloat(bounds.northeast.lat),
-                                    lng: parseFloat(bounds.northeast.lng),
-                                },
-                                southwest: {
-                                    lat: parseFloat(bounds.southwest.lat),
-                                    lng: parseFloat(bounds.southwest.lng),
-                                },
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        // eslint-disable-next-line no-console
-                        console.log(error);
-                    });
-            }
-        }
-    }, [formik.values.village, formik.values.district, formik.values.city, formik.values.region, formik.values.country]);
 
     // Function to render the maps
     // eslint-disable-next-line arrow-body-style
