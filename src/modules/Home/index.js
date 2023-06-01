@@ -86,10 +86,10 @@ const Home = () => {
                 {listAddress?.length !== 0 ?
                     <Grid container spacing={{ xs: 1, md: 2 }}>
                         {listAddress?.map((data, index) => (
-                            <Grid item xs={12} sm={6} index={index} className={styles.gridItems}>
+                            <Grid item xs={12} sm={6} md={4} index={index} className={styles.gridItems}>
                                 <Paper className={styles.paper}>
                                     <Grid container spacing={2} className={styles.dataWrapper}>
-                                        <Grid item sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Typography variant="subtitle1" type="regular" className={styles.dataName}>
                                                 Provinsi :
                                             </Typography>
@@ -97,7 +97,7 @@ const Home = () => {
                                                 {data.region_name}
                                             </Typography>
                                         </Grid>
-                                        <Grid item sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Typography variant="subtitle1" type="regular" className={styles.dataName}>
                                                 Kota :
                                             </Typography>
@@ -105,7 +105,7 @@ const Home = () => {
                                                 {data.city}
                                             </Typography>
                                         </Grid>
-                                        <Grid item sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Typography variant="subtitle1" type="regular" className={styles.dataName}>
                                                 Kecamatan :
                                             </Typography>
@@ -113,7 +113,7 @@ const Home = () => {
                                                 {data.district}
                                             </Typography>
                                         </Grid>
-                                        <Grid item sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Typography variant="subtitle1" type="regular" className={styles.dataName}>
                                                 Kelurahan :
                                             </Typography>
@@ -131,40 +131,82 @@ const Home = () => {
                                         </Grid>
                                     </Grid>
                                     <Box display="flex" flexDirection="row" p={0} m={0} bgcolor="background.paper">
-                                        <Button
-                                            className={styles.buttonDirection}
-                                            id="btnInputAddressForm"
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => {
-                                                handleClickOpen()
-                                                let list = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressList') || "[]") : ''
-                                                localStorage.setItem('addressListDetail', JSON.stringify(list[index]));
-                                                let coordsDestination = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressListDetail') || "{}") : ''
-                                                setCoordsDestination(coordsDestination)
-                                            }}
-                                        >
-                                            <Typography variant="subtitle1" type="bold">
-                                                Direction
-                                            </Typography>
-                                        </Button>
-                                        <Button
-                                            className={styles.buttonRemove}
-                                            id="btnInputAddressForm"
-                                            variant="contained"
-                                            color="secondary"
-                                            onClick={() => {
-                                                let list = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressList') || "[]") : ''
-                                                const removed = list.splice(index, 1)
-                                                localStorage.setItem('addressList', JSON.stringify(list));
-                                                window.location.reload()
-                                            }}
-                                        >
-                                            <Typography variant="subtitle1" type="bold">
-                                                Hapus Alamat
-                                            </Typography>
-                                        </Button>
+                                        <Grid container spacing={2} className={styles.dataWrapper}>
+                                            <Grid item xs={6}>
+                                                <Button
+                                                    className={styles.buttonDirection}
+                                                    id="btnInputAddressForm"
+                                                    fullWidth
+                                                    variant="contained"
+                                                    color="primary"
+                                                    disabled={data.lat === null ? true : ''}
+                                                    onClick={() => {
+                                                        handleClickOpen()
+                                                        let list = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressList') || "[]") : ''
+                                                        localStorage.setItem('addressListDetail', JSON.stringify(list[index]));
+                                                        let coordsDestination = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressListDetail') || "{}") : ''
+                                                        setCoordsDestination(coordsDestination)
+                                                    }}
+                                                >
+                                                    <Typography variant="subtitle1" type="bold">
+                                                        Direction
+                                                    </Typography>
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Button
+                                                    className={styles.buttonRemove}
+                                                    id="btnInputAddressForm"
+                                                    fullWidth
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={() => {
+                                                        let list = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressList') || "[]") : ''
+                                                        const removed = list.splice(index, 1)
+                                                        localStorage.setItem('addressList', JSON.stringify(list));
+                                                        window.location.reload()
+                                                    }}
+                                                >
+                                                    <Typography variant="subtitle1" type="bold">
+                                                        Hapus Alamat
+                                                    </Typography>
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
                                     </Box>
+                                    <Button
+                                        className={styles.buttonDirection}
+                                        id="btnInputAddressForm"
+                                        fullWidth
+                                        variant="contained"
+                                        color="green"
+                                        onClick={() => {
+                                            let list = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressList') || "[]") : ''
+                                            router.push('/addressform/edit/' + index)
+                                        }}
+                                    >
+                                        <Typography variant="subtitle1" type="bold">
+                                            Edit Alamat
+                                        </Typography>
+                                    </Button>
+                                    <Button
+                                        className={styles.buttonDirection}
+                                        id="btnInputAddressForm"
+                                        variant="contained"
+                                        fullWidth
+                                        color="secondary"
+                                        onClick={() => {
+                                            let list = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('addressList') || "[]") : ''
+                                            list[index].lat = null
+                                            list[index].lng = null
+                                            localStorage.setItem('addressList', JSON.stringify(list));
+                                            window.location.reload()
+                                        }}
+                                    >
+                                        <Typography variant="subtitle1" type="bold">
+                                            Hapus Pinpoint Location
+                                        </Typography>
+                                    </Button>
                                 </Paper>
                             </Grid>
                         ))}

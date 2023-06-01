@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './style';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import MapsAutocomplete from '../commons/GoogleMapsAutocomplete';
+import MapsAutocomplete from '../../commons/GoogleMapsAutocomplete';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
@@ -203,21 +203,6 @@ const AddressFormView = () => {
                     mapPosition={mapPosition}
                     dragMarkerDone={handleDragPosition}
                 />
-                <Button
-                    fullWidth
-                    className={styles.button}
-                    variant="contained" color="secondary"
-                    id="btnInputAddressForm"
-                    type="submit"
-                    onClick={() =>{
-                        localStorage.removeItem('lat');
-                        localStorage.removeItem('lng');
-                    }}
-                >
-                    <Typography type="bold">
-                        Hapus Pinpoint Location
-                    </Typography>
-                </Button>
             </Box>
             <form onSubmit={formik.handleSubmit}>
                 <Box className={styles.detailWrapper}>
@@ -231,7 +216,7 @@ const AddressFormView = () => {
                             </Typography>
                             <TextField
                                 name="regionName"
-                                placeholder="Ketik Alamat Lengkap..."
+                                placeholder="Ketik Provinsi"
                                 value={regionNameState}
                                 autoComplete='off'
                                 onChange={(e) => {
