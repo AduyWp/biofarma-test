@@ -58,7 +58,7 @@ const MapsAutocomplete = (props) => {
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: gmapKey,
         libraries,
-        url: 'https://maps.googleapis.com/maps/api/js',
+        url: 'https://gmapkey.sandbox.id/maps/api/js',
     });
 
     // Set a new coordinates information when user drag the marker icon

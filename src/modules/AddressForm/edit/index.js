@@ -204,7 +204,7 @@ const AddressFormView = () => {
             </IconButton>
             <Box className={styles.resultWrapper}>
                 <MapsAutocomplete
-                    gmapKey="AIzaSyD4eYFRKbKxol1mnZ6GGLBFAx6VyogMej0"
+                    gmapKey="AIzaSyCsWgNT9vLJSzSBmJlqFdembBz4zBCLRgQ"
                     formik={formik}
                     mapPosition={mapPosition}
                     dragMarkerDone={handleDragPosition}
